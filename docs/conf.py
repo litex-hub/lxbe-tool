@@ -20,6 +20,12 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
+# Horrible hack
+import os
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if on_rtd and not os.path.exists('api'):
+    import subprocess
+    subprocess.check_call('make api', shell=True)
 
 # -- General configuration ------------------------------------------------
 
