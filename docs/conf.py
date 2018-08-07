@@ -15,17 +15,29 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+
+import os.path
+mydir = os.path.dirname(os.path.abspath(__file__))
+
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.join(mydir, '..'))
 
 # Horrible hack
-import os
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if on_rtd and not os.path.exists('api'):
+inside_sphinx = os.environ.get('INSIDE_SPHINX', None) == 'True'
+if on_rtd and not inside_sphinx:
+    assert hasattr(sys, 'real_prefix')
     import subprocess
-    subprocess.check_call('make api', shell=True)
+    print()
+    print("Generating API documentation.")
+    print("---------------------------------------------")
+    os.environ['INSIDE_SPHINX'] = 'True'
+    sys.stdout.flush()
+    subprocess.check_call('rm -rf api; cd ..; sphinx-apidoc --ext-autodoc --ext-doctest --ext-todo --module-first -f -o docs/api lxbe_tool', shell=True)
+    sys.stdout.flush()
+    print("---------------------------------------------")
+    print()
 
 # -- General configuration ------------------------------------------------
 
@@ -112,7 +124,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['.build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -142,7 +154,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['.static']
+html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -217,9 +229,9 @@ texinfo_documents = [
 ]
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', (None, '.build/intersphinx_python.inv')),
-    'migen': ('https://m-labs.hk/migen/manual/', (None, '.build/intersphinx_migen.inv')),
-    # FIXME: 'litex': ('https://m-labs.hk/migen/manual/', (None, '.build/intersphinx_migen.inv')),
+    'python': ('https://docs.python.org/3/', (None, '_build/intersphinx_python.inv')),
+    'migen': ('https://m-labs.hk/migen/manual/', (None, '_build/intersphinx_migen.inv')),
+    # FIXME: 'litex': ('https://m-labs.hk/migen/manual/', (None, '_build/intersphinx_migen.inv')),
 }
 
 def linkcode_resolve(domain, info):

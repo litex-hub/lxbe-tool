@@ -4,19 +4,27 @@
 # Disable make's inbuilt rules
 .SUFFIXES:
 
+INSIDE_VENV  = $(shell python3 -c "import sys; print(hasattr(sys, 'real_prefix'))")
+
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = $(VENV_ROOT)/bin/sphinx-build
 SPHINXPROJ    = LiteXBuildEnvironmentTool
 SOURCEDIR     = .
-BUILDDIR      = .build
+BUILDDIR      = _build
 VENV_ROOT     = $(BUILDDIR)/.venv
 
 # Set up a virtualenv
 $(VENV_ROOT)/bin/python3:
 	virtualenv -p python3 $(VENV_ROOT)
 
+ifeq ($(INSIDE_VENV),False)
 ACTIVATE = source $(VENV_ROOT)/bin/activate
+SPHINXRUN = $(ACTIVATE); $(VENV_ROOT)/bin/python3 $(VENV_ROOT)/bin/sphinx-build
+else
+ACTIVATE = true
+SPHINXRUN = sphinx-build
+endif
 
 # Put it first so that "make" without argument is like "make help".
 #-------------------------------------------
@@ -35,15 +43,13 @@ $(SPHINXBUILD): $(VENV_ROOT)/requirements.stamp $(VENV_ROOT)/bin/python3
 	@touch $<
 
 distclean:
-	rm -rf _build $(VENV_ROOT) .Makefile.d
-	mkdir -p _build
+	rm -rf $(BUILDDIR) $(VENV_ROOT) .Makefile.d
+	mkdir -p $(BUILDDIR)
 	mkdir -p $(VENV_ROOT)
 
 clean:
-	rm -rf _doxygen verilog
+	rm -rf api
 	@$(ACTIVATE); $(SPHINXRUN) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-
-SPHINXRUN = $(ACTIVATE); $(VENV_ROOT)/bin/python3 $(VENV_ROOT)/bin/sphinx-build
 
 .PHONY: distclean clean
 
@@ -61,7 +67,6 @@ SPHINXSUBCMD = $(SPHINXRUN) -M $$@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(
 -include .Makefile.d
 
 api:
-	($(ACTIVATE); cd ..; sphinx-apidoc --ext-autodoc --ext-doctest --ext-todo --module-first -f -o docs/api lxbe_tool)
-
+	($(ACTIVATE); find | sort; cd ..; sphinx-apidoc --ext-autodoc --ext-doctest --ext-todo --module-first -f -o docs/api lxbe_tool)
 
 .PHONY: api
