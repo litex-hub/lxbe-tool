@@ -20,7 +20,7 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 api:
-	sphinx-apidoc -f -o api ../lxbe_tool
+	(cd ..; sphinx-apidoc --ext-autodoc --ext-doctest --ext-todo --module-first -f -o docs/api lxbe_tool)
 
 
 .PHONY: api
