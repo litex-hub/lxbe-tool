@@ -7,14 +7,10 @@ Welcome to LiteX Build Environment Tool's documentation!
 ========================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-.. automodule:: providers
-    :members:
-    :undoc-members:
-    :inherited-members:
-    :show-inheritance:
+   api/modules
 
 
 Indices and tables
