@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from abc import ABC
+import abc
 
 class ToolNotFoundError(OSError):
     """Tool is not found in environment."""
@@ -12,10 +12,10 @@ class ToolWrongVersionError(OSError):
     pass
 
 
-class Provider(ABC):
+class Provider(abc.ABC):
     """Base class for all providers."""
 
-    @abstractmethod
+    @abc.abstractmethod
     def install_module(self, module_name, module_path=None, module_version=None):
         """Install a Python module into the Python environment.
 
@@ -25,7 +25,7 @@ class Provider(ABC):
         """
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def find_tool(self, tool_name, tool_version):
         """Find a tool inside the provider environment.
 
@@ -41,7 +41,7 @@ class Provider(ABC):
         """
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def install_tool(self, tool_name, tool_version):
         """Installs a tool inside the provider environment.
 
