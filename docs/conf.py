@@ -32,12 +32,39 @@ sys.path.insert(0, os.path.abspath('..'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.coverage',
+    'sphinx.ext.doctest',               # Import doctest as examples
+    'sphinx.ext.extlinks',              # Enable short links
+    'sphinx.ext.githubpages',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.imgconverter',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.intersphinx',           # Links to other Sphinx instances
+    'sphinx.ext.linkcode',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.napoleon',              # Google and NumPy style docstrings
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
+    # Sphinx Contrib Packages
+    #'sphinxcontrib.ansi',               # .. ansi-block::
+    #'sphinxcontrib.argdoc',             # Automatic docs from argparse (maybe 'sphinxcontrib.autoprogram' instead?)
+    #'sphinxcontrib.cheader',            # .. c:header:: <libfoobar.h> - No module named 'sphinx.util.compat'
+    #'sphinxcontrib.cheeseshop',         # :pypi:`Sphinx`
+    #'sphinxcontrib.cmakedomain',
+    #'sphinxcontrib.documentedlist',     # .. documentedlist::
+    #'sphinxcontrib.examplecode',
+    #'sphinxcontrib.makedomain',         # https://bitbucket.org/klorenz/sphinxcontrib-makedomain
+    #'sphinxcontrib.manpage',            # :linuxman:ls(1)
+    #'sphinxcontrib.spelling',           # Spell checking!
+    #'sphinxcontrib_trio',               # Better abstract and similar detection
+    #'sphinx_git',                       # .. git_changelog::
+    #'sphinx_autodoc_typehints',         #
 ]
+
+extlinks = {
+    'issue': ('https://github.com/mithro/lxbe-tool/issues/%s', 'issue ')
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['.templates']
@@ -92,8 +119,13 @@ todo_include_todos = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-html_theme = 'alabaster'
+#html_theme = 'alabaster'
+# Cool looking ReadTheDocs theme
+import sphinx_rtd_theme
+
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -178,8 +210,18 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', (None, '.build/intersphinx_python.inv')),
+    'migen': ('https://m-labs.hk/migen/manual/', (None, '.build/intersphinx_migen.inv')),
+    # FIXME: 'litex': ('https://m-labs.hk/migen/manual/', (None, '.build/intersphinx_migen.inv')),
+}
 
-
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+def linkcode_resolve(domain, info):
+    # FIXME: Make this work!
+    return None
+    if domain != 'py':
+        return None
+    if not info['module']:
+        return None
+    filename = info['module'].replace('.', '/')
+    return "http://somesite/sourcerepo/%s.py" % filename

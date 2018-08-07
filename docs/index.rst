@@ -10,6 +10,11 @@ Welcome to LiteX Build Environment Tool's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+.. automodule:: providers
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:
 
 
 Indices and tables
