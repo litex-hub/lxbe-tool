@@ -38,3 +38,12 @@ function check_import_version {
 	fi
 }
 """
+
+def check_python_version(args):
+    import platform
+    # Litex / Migen require Python 3.5 or newer.  Ensure we're running
+    # under a compatible version of Python.
+    if sys.version_info[:3] < (3, 5):
+        return (False,
+            "python: You need Python 3.5+ (version {} found)".format(sys.version_info[:3]))
+    return (True, "python 3.5+: ok (Python {} found)".format(platform.python_version()))
