@@ -44,6 +44,24 @@ def _parse_version(filename):
     return CondaVersionTuple(version, system, arch, filename)
 
 
+def _extract_installer_info(filename):
+    """
+    Extract the header information found at the top of the Miniconda install package.
+
+    >>> data = '''\
+#!/bin/sh
+#
+# NAME:  Miniconda3
+# VER:   4.5.4
+# PLAT:  linux-64
+# BYTES:     58468498
+# LINES: 502
+# MD5:   75a9f0faa822a01dfe0e0e5c43400ed0
+'''
+    """
+    pass
+
+
 def _extract_versions(s):
     """Extract the available Miniconda version tuples from index page.
 
