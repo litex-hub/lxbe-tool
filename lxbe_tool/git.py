@@ -1,4 +1,16 @@
 
+"""
+# Useful git config for working with git submodules in this repo
+(
+	git config status.submodulesummary 1
+	git config push.recurseSubmodules check
+	git config diff.submodule log
+	git config checkout.recurseSubmodules 1
+	git config alias.sdiff '!'"git diff && git submodule foreach 'git diff'"
+	git config alias.spush 'push --recurse-submodules=on-demand'
+)
+"""
+
 
 """
 # Disable prompting for passwords - works with git version 2.3 or above
@@ -15,16 +27,14 @@ git config credential.helper $GIT_CREDENTIAL_HELPER
 """
 
 """
-echo ""
-echo ""
-echo ""
-echo "- Fetching non shallow to get git version"
-echo "---------------------------------------------"
+# Fetching non shallow + tags to allow `git describe` information.
 git fetch origin --unshallow || true
 git fetch origin --tags
 """
 
 """
+Clone a users version of a submodule if they have one.
+
 Original from https://github.com/timvideos/litex-buildenv/blob/master/.travis/add-local-submodule.sh
 USER_SLUG="$1"
 SUBMODULE="$2"
