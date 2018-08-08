@@ -115,7 +115,7 @@ class Conda(Provider):
 
 
     def __init__(self, download_dir):
-        # platform.machine() == 'x86'     32bit x86 computer
+        # platform.machine() == 'x86'     32bit x86 computer -- maybe i686 or i386 or i586?
         # platform.machine() == 'x86_64'  64bit x86 computer
         # platform.machine() == 'armv6l'  Older RPi
         # platform.machine() == 'armv7l'  Newest RPi
